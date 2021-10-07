@@ -16,7 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from hnservice.views import hello
+from datetime import datetime, timedelta, tzinfo
+from time import timezone
+from pytz import utc
+
+from hnservice.tasks import get_latest_news, schedule_task
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +29,4 @@ urlpatterns = [
 
 
 # Call background tasks every 10 seconds
-# hello(repeat=10)
+get_latest_news(schedule=5, repeat=5, repeat_until=schedule_task(), verbose_name="Get Latest News")
