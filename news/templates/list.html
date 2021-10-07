@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Latest News{% endblock title %}
+
+{% block content %}
+<ul>
+    {% for news_item in news_list %}
+    <li>
+        <div>{{ news_item.type }}</div>
+        <div>Written by: <span>{{ news_item.by }}</span></div>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock content %}
