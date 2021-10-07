@@ -16,7 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from hnservice.views import hello
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('news.urls')),
+    path('', include('hnservice.urls')),
 ]
+
+
+# Call background tasks every 10 seconds
+# hello(repeat=10)

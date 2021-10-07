@@ -4,7 +4,9 @@
 {% block content %}
 <ul>
     {% for item in news_items %}
-        <li>{{ item }}</li>
+        <li>
+            <a href="{% url 'news_detail' item %}">{{ item }}</a>
+        </li>
     {% endfor %}
 </ul>
 {% endblock content %}

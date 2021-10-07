@@ -40,6 +40,10 @@ INSTALLED_APPS = [
 
     # local apps
     'news.apps.NewsConfig',
+    'hnservice.apps.HnserviceConfig',
+
+    # 3rd party apps
+    'background_task',
 ]
 
 MIDDLEWARE = [

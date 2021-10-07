@@ -15,7 +15,15 @@ class NewsListView(ListView):
 def homePageView(request):
     # get the list of news items
     url = "https://hacker-news.firebaseio.com/v0/topstories.json"
-    response = requests.get(url=url)
+    response = requests.get(url)
     news_items = response.json()
     
     return render(request, 'home.html', {"news_items": news_items[:100]})
+
+def detailPageView(request, item):
+    # get the detail page of the item
+    url = f"https://hacker-news.firebaseio.com/v0/item/{item}.json"
+    response = requests.get(url)
+    news_item = response.json()
+
+    return render(request, 'detail.html', {"news_item": news_item})
