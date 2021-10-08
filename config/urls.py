@@ -21,7 +21,7 @@ import hnservice.tasks
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('hnservice.urls')),
+    path('', include('news.urls')),
 ]
 
 # Start task to download news items

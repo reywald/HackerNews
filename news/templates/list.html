@@ -1,13 +1,21 @@
 {% extends 'base.html' %}
+{% load timestamptag %}
+
 {% block title %}Latest News{% endblock title %}
 
 {% block content %}
-<ul>
-    {% for news_item in news_list %}
-    <li>
-        <div>{{ news_item.type }}</div>
-        <div>Written by: <span>{{ news_item.by }}</span></div>
-    </li>
-    {% endfor %}
-</ul>
+    <h3>Comments</h3>
+    <div>
+        {% for comment in comments %}
+        <div style="border-bottom: 2px solid black">
+            <h4>{{ comment.by }} posted on: <a>{{ comment.time | to_date }}</a></h4>
+
+            <p>
+                {% autoescape off %}
+                    {{ comment.text }}
+                {% endautoescape %}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
 {% endblock content %}

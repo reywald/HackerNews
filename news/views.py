@@ -1,29 +1,32 @@
-from django import shortcuts
+from django.views.generic import ListView, DetailView
+from .models import Comment, Job, Poll, PollOption, Story
 
-
-from django.shortcuts import render
-from django.http import HttpResponse, response
-from django.views.generic import ListView
-
-import requests, json
-
-# Create your views here.
 
 class NewsListView(ListView):
-    pass
+    template_name = 'list.html'
 
-def homePageView(request):
-    # get the list of news items
-    url = "https://hacker-news.firebaseio.com/v0/topstories.json"
-    response = requests.get(url)
-    news_items = response.json()
-    
-    return render(request, 'home.html', {"news_items": news_items[:100]})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = Comment.objects.all()
+        context['jobs'] = Job.objects.all()
+        context['polls'] = Poll.objects.all()
+        context['polloptions'] = PollOption.objects.all()
+        context['stories'] = Story.objects.all()
 
-def detailPageView(request, item):
-    # get the detail page of the item
-    url = f"https://hacker-news.firebaseio.com/v0/item/{item}.json"
-    response = requests.get(url)
-    news_item = response.json()
+        return context
 
-    return render(request, 'detail.html', {"news_item": news_item})
+
+class CommentListView(ListView):
+    model = Comment
+    template_name = 'list.html'
+    context_object_name = 'comments'
+
+
+class CommentDetailView(DetailView):
+    model = Comment
+    template_name = 'detail.html'
+
+
+class JobDetailView(DetailView):
+    template_name = 'detail.html'
+    model = Job

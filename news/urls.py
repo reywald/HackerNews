@@ -1,8 +1,7 @@
 from django.urls import path
-from .views import NewsListView
-from .views import homePageView, detailPageView
+from .views import CommentListView, CommentDetailView
 
 urlpatterns = [
-    path('news/<str:item>', detailPageView, name='news_detail'),
-    path('', homePageView, name='home'),
+    path('news/<int:pk>', CommentDetailView, name='comment_detail'),
+    path('', CommentListView.as_view(), name='comments'),
 ]
