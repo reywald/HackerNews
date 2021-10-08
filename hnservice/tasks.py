@@ -3,9 +3,10 @@
 import requests
 
 # Scheduler's modules
-from background_task import background
+from background_task import background, tasks
+from background_task.models import Task
 from datetime import datetime, timedelta
-from time import timezone
+import pytz
 
 from .db_services import DBchecker, DBWriter
 
@@ -15,17 +16,17 @@ checker = DBchecker()
 writer = DBWriter()
 
 
-@background(schedule=5)
+@background(schedule=60)
 def get_latest_news():
 
     # Get most recent news if tables are populated
     if checker.check_dbs():
-      url = f"{baseUrl}/maxitem.json"
-      response = requests.get(url)
+        url = f"{baseUrl}/maxitem.json"
+        response = requests.get(url)
 
-      item = get_item_details(response.json())
-      print(item, type(item))
-      writer.write_item_to_db(item)
+        item = get_item_details(response.json())
+        # print(item, type(item))
+        writer.write_item_to_db(item)
 
     # Otherwise, get and process latest 100 records
     else:
@@ -37,7 +38,7 @@ def get_latest_news():
 
         selected_news_items = news_items[:100]
         for item in selected_news_items:
-            item_details = get_item_details()
+            item_details = get_item_details(item)
             writer.write_item_to_db(item_details)
 
 
@@ -48,15 +49,18 @@ def get_item_details(item):
     return response.json()
 
 
-def schedule_task():
-    today = datetime.now()
+def stop_task():
+    pass
 
-    # Calculate timezone
-    hour_offset = timezone // (60 * 60)
 
-    later = timedelta(hours=hour_offset, minutes=0, seconds=0)
-    stop = today + later
-    stop = datetime(stop.year, stop.month, stop.day, stop.hour,
-                    stop.minute, stop.second, 0)
+def start_task():
+    tasks = Task.objects.filter(verbose_name="Get Latest News")
+    if len(tasks) == 0:
 
-    return stop
+        # Schedule to stop after 1 hour
+        stop = datetime.utcnow().replace(tzinfo=pytz.utc) + \
+            timedelta(hours=1, minutes=0, seconds=0)
+
+        # No task running with this name, call background tasks every 5 minutes
+        get_latest_news(schedule=timedelta(seconds=60), repeat=300,
+                        repeat_until=stop, verbose_name="Get Latest News")

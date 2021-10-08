@@ -13,21 +13,16 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from datetime import timedelta
 from django.contrib import admin
 from django.urls import path, include
 
-from datetime import datetime, timedelta, tzinfo
-from time import timezone
-from pytz import utc
-
-from hnservice.tasks import get_latest_news, schedule_task
+import hnservice.tasks
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('hnservice.urls')),
 ]
 
-
-# Call background tasks every 5 minutes
-get_latest_news(schedule=5, repeat=300, repeat_until=schedule_task(), verbose_name="Get Latest News")
-# get_latest_news(schedule=5, verbose_name="Get Latest News")
+# Start task to download news items
+hnservice.tasks.start_task()
