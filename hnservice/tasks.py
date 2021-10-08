@@ -25,6 +25,7 @@ def get_latest_news():
     response = requests.get(url)
 
     item = get_item_details(response.json())
+    print(item, type(item))
     writer.write_item_to_db(item)
 
     # # Otherwise, get and process latest 100 records

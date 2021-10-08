@@ -21,19 +21,19 @@ class DBWriter():
         # Check the type of item: job, story, comment, poll, pollopt
         # and delegate to the relevant function
 
-        if news_item.type == 'job':
+        if news_item["type"] == 'job':
             self.__write_job_to_db(news_item)
 
-        elif news_item.type == 'comment':
+        elif news_item["type"] == 'comment':
             self.__write_comments_to_db(news_item)
 
-        elif news_item.type == 'poll':
+        elif news_item["type"] == 'poll':
             self.__write_poll_to_db(news_item)
 
-        elif news_item.type == 'pollopt':
+        elif news_item["type"] == 'pollopt':
             self.__write_poll_option_to_db(news_item)
 
-        elif news_item.type == 'story':
+        elif news_item["type"] == 'story':
             self.__write_story_to_db(news_item)
 
     def __write_job_to_db(self, news_item: dict):
