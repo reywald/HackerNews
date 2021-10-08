@@ -4,11 +4,10 @@ import requests
 
 # Scheduler's modules
 from background_task import background
-from datetime import datetime, timedelta, tzinfo
+from datetime import datetime, timedelta
 from time import timezone
-from pytz import utc
 
-from hnservice.db_services import DBchecker, DBWriter
+from .db_services import DBchecker, DBWriter
 
 
 baseUrl = "https://hacker-news.firebaseio.com/v0"
@@ -20,13 +19,13 @@ writer = DBWriter()
 def get_latest_news():
 
     # Get most recent news if tables are populated
-    print(checker.check_dbs())
+    # print(checker.check_dbs())
     # if checker.check_dbs():
-    #     url = f"{baseUrl}/maxitem.json"
-    #     response = requests.get(url)
+    url = f"{baseUrl}/maxitem.json"
+    response = requests.get(url)
 
-    #     item = get_item_details(response.json())
-    #     writer.write_item_to_db(item)
+    item = get_item_details(response.json())
+    writer.write_item_to_db(item)
 
     # # Otherwise, get and process latest 100 records
     # else:
@@ -51,13 +50,13 @@ def get_item_details(item):
 
 def schedule_task():
     today = datetime.now()
-    later = timedelta(hours=0, minutes=0, seconds=60)
 
     # Calculate timezone
     hour_offset = timezone // (60 * 60)
 
+    later = timedelta(hours=hour_offset, minutes=0, seconds=60)
     stop = today + later
-    stop = datetime(stop.year, stop.month, stop.day, stop.hour +
-                    hour_offset, stop.minute, stop.second, 0, tzinfo=utc)
-    
+    stop = datetime(stop.year, stop.month, stop.day, stop.hour,
+                    stop.minute, stop.second, 0)
+
     return stop

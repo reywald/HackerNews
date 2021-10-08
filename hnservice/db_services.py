@@ -9,8 +9,9 @@ class DBchecker():
         story_db = Story.objects.first()
         job_db = Job.objects.first()
         poll_db = Poll.objects.first()
+        comment_db = Comment.objects.first()
 
-        return poll_db is not None and job_db is not None and story_db is not None
+        return poll_db is not None or job_db is not None or story_db is not None or comment_db is not None
 
 
 class DBWriter():
@@ -36,21 +37,16 @@ class DBWriter():
             self.__write_story_to_db(news_item)
 
     def __write_job_to_db(self, news_item: dict):
-        job = Job(**news_item)
-        job.save()
+        Job.objects.create(**news_item)
 
     def __write_comments_to_db(self, news_item: dict):
-        comment = Comment(**news_item)
-        comment.save()
+        Comment.objects.create(**news_item)
 
     def __write_poll_to_db(self, news_item: dict):
-        poll = Poll(**news_item)
-        poll.save()
+        Poll.objects.create(**news_item)
 
     def __write_poll_option_to_db(self, news_item: dict):
-        poll_option = PollOption(**news_item)
-        poll_option.save()
+        PollOption.objects.create(**news_item)
 
     def __write_story_to_db(self, news_item: dict):
-        story = Story(**news_item)
-        story.save()
+        Story.objects.create(**news_item)
