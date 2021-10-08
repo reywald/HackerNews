@@ -6,12 +6,12 @@ import uuid
 
 
 class Base(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.PositiveIntegerField(primary_key=True, editable=False)
     deleted = models.BooleanField(default=False)
 
     type = models.CharField(max_length=15, null=False)
     by = models.CharField(max_length=20, null=True, blank=True)
-    time = models.IntegerField(null=True, blank=True)
+    time = models.PositiveIntegerField(null=True, blank=True)
     dead = models.BooleanField(default=False)
     kids = models.TextField(null=True)
 
@@ -34,8 +34,8 @@ class Job(Base):
 
 class Story(Base):
 
-    descendants = models.IntegerField(null=True, blank=True)
-    score = models.IntegerField(null=True, blank=True)
+    descendants = models.PositiveIntegerField(null=True, blank=True)
+    score = models.PositiveIntegerField(null=True, blank=True)
     title = models.CharField(max_length=100, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
 
@@ -48,7 +48,7 @@ class Story(Base):
 
 class Comment(Base):
 
-    parent = models.IntegerField(null=True, blank=True)
+    parent = models.PositiveIntegerField(null=True, blank=True)
     text = models.CharField(max_length=500, null=True, blank=True)
 
     def __str__(self) -> str:
@@ -61,8 +61,8 @@ class Comment(Base):
 class Poll(Base):
 
     parts = models.TextField(null=True)
-    descendants = models.IntegerField(null=True, blank=True)
-    score = models.IntegerField(null=True, blank=True)
+    descendants = models.PositiveIntegerField(null=True, blank=True)
+    score = models.PositiveIntegerField(null=True, blank=True)
     title = models.CharField(max_length=100, null=True, blank=True)
     text = models.CharField(max_length=500, null=True, blank=True)
 
@@ -75,8 +75,8 @@ class Poll(Base):
 
 class PollOption(Base):
 
-    parent = models.IntegerField(null=True, blank=True)
-    score = models.IntegerField(null=True, blank=True)
+    parent = models.PositiveIntegerField(null=True, blank=True)
+    score = models.PositiveIntegerField(null=True, blank=True)
 
     def __str__(self) -> str:
         return self.parent
