@@ -28,6 +28,6 @@ urlpatterns = [
 ]
 
 
-# Call background tasks every 10 seconds
-# get_latest_news(schedule=5, repeat=5, repeat_until=schedule_task(), verbose_name="Get Latest News")
-get_latest_news(schedule=5, verbose_name="Get Latest News")
+# Call background tasks every 5 minutes
+get_latest_news(schedule=5, repeat=300, repeat_until=schedule_task(), verbose_name="Get Latest News")
+# get_latest_news(schedule=5, verbose_name="Get Latest News")

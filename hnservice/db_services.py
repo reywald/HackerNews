@@ -37,16 +37,16 @@ class DBWriter():
             self.__write_story_to_db(news_item)
 
     def __write_job_to_db(self, news_item: dict):
-        Job.objects.create(**news_item)
+        Job.objects.get_or_create(**news_item)
 
     def __write_comments_to_db(self, news_item: dict):
-        Comment.objects.create(**news_item)
+        Comment.objects.get_or_create(**news_item)
 
     def __write_poll_to_db(self, news_item: dict):
-        Poll.objects.create(**news_item)
+        Poll.objects.get_or_create(**news_item)
 
     def __write_poll_option_to_db(self, news_item: dict):
-        PollOption.objects.create(**news_item)
+        PollOption.objects.get_or_create(**news_item)
 
     def __write_story_to_db(self, news_item: dict):
-        Story.objects.create(**news_item)
+        Story.objects.get_or_create(**news_item)

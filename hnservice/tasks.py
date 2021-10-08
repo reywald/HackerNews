@@ -19,27 +19,26 @@ writer = DBWriter()
 def get_latest_news():
 
     # Get most recent news if tables are populated
-    # print(checker.check_dbs())
-    # if checker.check_dbs():
-    url = f"{baseUrl}/maxitem.json"
-    response = requests.get(url)
+    if checker.check_dbs():
+      url = f"{baseUrl}/maxitem.json"
+      response = requests.get(url)
 
-    item = get_item_details(response.json())
-    print(item, type(item))
-    writer.write_item_to_db(item)
+      item = get_item_details(response.json())
+      print(item, type(item))
+      writer.write_item_to_db(item)
 
-    # # Otherwise, get and process latest 100 records
-    # else:
+    # Otherwise, get and process latest 100 records
+    else:
 
-    #     # get the list of news items
-    #     url = f"{baseUrl}/topstories.json"
-    #     response = requests.get(url)
-    #     news_items = response.json()
+        # get the list of news items
+        url = f"{baseUrl}/topstories.json"
+        response = requests.get(url)
+        news_items = response.json()
 
-    #     selected_news_items = news_items[:100]
-    #     for item in selected_news_items:
-    #         item_details = get_item_details()
-    #         writer.write_item_to_db(item_details)
+        selected_news_items = news_items[:100]
+        for item in selected_news_items:
+            item_details = get_item_details()
+            writer.write_item_to_db(item_details)
 
 
 def get_item_details(item):
@@ -55,7 +54,7 @@ def schedule_task():
     # Calculate timezone
     hour_offset = timezone // (60 * 60)
 
-    later = timedelta(hours=hour_offset, minutes=0, seconds=60)
+    later = timedelta(hours=hour_offset, minutes=0, seconds=0)
     stop = today + later
     stop = datetime(stop.year, stop.month, stop.day, stop.hour,
                     stop.minute, stop.second, 0)
