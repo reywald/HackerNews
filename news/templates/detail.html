@@ -1,10 +1,15 @@
 {% extends 'base.html' %}
+{% load timestamptag %}
+
 {% block title %}Details{% endblock title %}
 
 {% block content %}
 <div>
-    {% for key, value in news_item.items %}
-        <p><b>{{ key }}</b>: {{ value }}</p>
-    {% endfor %}
+    {{ comment.by }} says @ {{ comment.time | to_date }}:
+    {% autoescape off %}
+    <p>
+        {{ comment }}
+    </p>
+    {% endautoescape %}
 </div>
 {% endblock content %}

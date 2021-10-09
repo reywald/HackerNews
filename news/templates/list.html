@@ -4,18 +4,40 @@
 {% block title %}Latest News{% endblock title %}
 
 {% block content %}
-    <h3>Comments</h3>
+    <h3>{{ news_heading }}</h3>
     <div>
-        {% for comment in comments %}
+        {% for new_item in page_obj %}
         <div style="border-bottom: 2px solid black">
-            <h4>{{ comment.by }} posted on: <a>{{ comment.time | to_date }}</a></h4>
+            <h4>{{ new_item.by }} posted on: <a>{{ new_item.time | to_date }}</a></h4>
 
-            <p>
+            {% if new_item.title %}
+                <p>{{ new_item.title }}</p>
+            {% endif %}
+        
+            {% if new_item.text %}
                 {% autoescape off %}
-                    {{ comment.text }}
+                    <p>{{ new_item.text | truncatewords_html:10 }}</p>
                 {% endautoescape %}
-            </p>
+            {% endif %} 
+            <a href="{% url 'comment_detail' new_item.id %}">more details></a>           
         </div>
+        
+        {% empty %}
+            <div>Sorry, no {{ news_heading }} to display.</div>
         {% endfor %}
+
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </div>
     </div>
 {% endblock content %}
