@@ -1,20 +1,7 @@
 from django.views.generic import ListView, DetailView
 from .models import Comment, Job, Poll, PollOption, Story
 
-
-class NewsListView(ListView):
-    template_name = 'list.html'
-    ordering = '-id'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['comments'] = Comment.objects.all()
-        context['jobs'] = Job.objects.all()
-        context['polls'] = Poll.objects.all()
-        context['polloptions'] = PollOption.objects.all()
-        context['stories'] = Story.objects.all()
-
-        return context
+from itertools import chain
 
 
 class BaseListView(ListView):
@@ -28,6 +15,30 @@ class BaseListView(ListView):
         context['news_heading'] = self.heading_type
 
         return context
+
+
+class NewsListView(BaseListView):
+    heading_type = 'All News'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = Comment.objects.all()
+        context['jobs'] = Job.objects.all()
+        context['polls'] = Poll.objects.all()
+        context['polloptions'] = PollOption.objects.all()
+        context['stories'] = Story.objects.all()
+
+        return context
+
+    def get_queryset(self):
+        comments = Comment.objects.all()
+        jobs = Job.objects.all()
+        polls = Poll.objects.all()
+        polloptions = PollOption.objects.all()
+        stories = Story.objects.all()
+
+        return sorted(chain(comments, jobs, polls, polloptions, stories), key=lambda item: item.id, reverse=True)
+        
 
 
 class CommentListView(BaseListView):

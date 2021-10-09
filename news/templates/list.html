@@ -19,7 +19,7 @@
                     <p>{{ new_item.text | truncatewords_html:10 }}</p>
                 {% endautoescape %}
             {% endif %} 
-            <a href="{% url 'comment_detail' new_item.id %}">more details></a>           
+            <a href="{{ new_item.get_absolute_url }}">more details></a>           
         </div>
         
         {% empty %}

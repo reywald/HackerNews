@@ -19,6 +19,18 @@ class Base(models.Model):
         abstract = True
 
 
+class Comment(Base):
+
+    parent = models.PositiveIntegerField(null=True, blank=True)
+    text = models.CharField(max_length=500, null=True, blank=True)
+
+    def __str__(self) -> str:
+        return self.text        # Truncate to 20 words
+
+    def get_absolute_url(self):
+        return reverse("comment_detail", kwargs={"pk": self.pk})
+
+
 class Job(Base):
 
     text = models.TextField(max_length=500, null=True, blank=True)
@@ -30,32 +42,6 @@ class Job(Base):
 
     def get_absolute_url(self):
         return reverse("job_detail", kwargs={"pk": self.pk})
-
-
-class Story(Base):
-
-    descendants = models.PositiveIntegerField(null=True, blank=True)
-    score = models.PositiveIntegerField(null=True, blank=True)
-    title = models.CharField(max_length=100, null=True, blank=True)
-    url = models.URLField(null=True, blank=True)
-
-    def __str__(self) -> str:
-        return self.title
-
-    def get_absolute_url(self):
-        return reverse("story_detail", kwargs={"pk": self.pk})
-
-
-class Comment(Base):
-
-    parent = models.PositiveIntegerField(null=True, blank=True)
-    text = models.CharField(max_length=500, null=True, blank=True)
-
-    def __str__(self) -> str:
-        return self.text        # Truncate to 20 words
-
-    def get_absolute_url(self):
-        return reverse("comment_detail", kwargs={"pk": self.pk})
 
 
 class Poll(Base):
@@ -83,3 +69,17 @@ class PollOption(Base):
 
     def get_absolute_url(self):
         return reverse("poll_option_detail", kwargs={"pk": self.pk})
+
+
+class Story(Base):
+
+    descendants = models.PositiveIntegerField(null=True, blank=True)
+    score = models.PositiveIntegerField(null=True, blank=True)
+    title = models.CharField(max_length=100, null=True, blank=True)
+    url = models.URLField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse("story_detail", kwargs={"pk": self.pk})

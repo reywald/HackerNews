@@ -5,10 +5,11 @@
 
 {% block content %}
 <div>
-    {{ comment.by }} says @ {{ comment.time | to_date }}:
+    <h4>{{ object.type | pluralize}}</h4>
+    {{ object.by }} says @ {{ object.time | to_date }}:
     {% autoescape off %}
     <p>
-        {{ comment }}
+        {{ object }}
     </p>
     {% endautoescape %}
 </div>
