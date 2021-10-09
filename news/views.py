@@ -13,6 +13,7 @@ class BaseListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['news_heading'] = self.heading_type
+        context['news_types'] = {'all': "All News", 'job': "Jobs", 'poll': "Polls", 'story': "Stories"}
 
         return context
 
@@ -38,7 +39,6 @@ class NewsListView(BaseListView):
         stories = Story.objects.all()
 
         return sorted(chain(comments, jobs, polls, polloptions, stories), key=lambda item: item.id, reverse=True)
-        
 
 
 class CommentListView(BaseListView):

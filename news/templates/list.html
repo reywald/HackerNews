@@ -10,6 +10,16 @@
             <p><a href="../">Home</a></p>
         {% endif %}
 
+        <div>
+            <select name="news_types" id="news_types" onchange="filterNews(this)">
+                {% for label, type in news_types.items %}
+                    {% if type not in news_heading %}
+                        <option value="{{ label }}">{{ type }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div> 
+
         {% for new_item in page_obj %}
         <div style="border-bottom: 2px solid black">
             <h4>{{ new_item.by }} posted on: <a>{{ new_item.time | to_date }}</a></h4>
