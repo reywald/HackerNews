@@ -6,6 +6,10 @@
 {% block content %}
     <h3>{{ news_heading }}</h3>
     <div>
+        {% if 'All News' not in news_heading %}
+            <p><a href="../">Home</a></p>
+        {% endif %}
+
         {% for new_item in page_obj %}
         <div style="border-bottom: 2px solid black">
             <h4>{{ new_item.by }} posted on: <a>{{ new_item.time | to_date }}</a></h4>

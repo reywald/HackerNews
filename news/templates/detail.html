@@ -12,5 +12,6 @@
         {{ object }}
     </p>
     {% endautoescape %}
+    <p><a href="{{ request.META.HTTP_REFERER|escape }}">Back</a></p>
 </div>
 {% endblock content %}
