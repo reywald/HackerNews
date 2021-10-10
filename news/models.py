@@ -33,6 +33,7 @@ class Comment(Base):
 
 class Job(Base):
 
+    score = models.PositiveIntegerField(null=True, blank=True)
     text = models.TextField(max_length=500, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
     title = models.CharField(max_length=100, null=True, blank=True)
@@ -76,6 +77,7 @@ class Story(Base):
     descendants = models.PositiveIntegerField(null=True, blank=True)
     score = models.PositiveIntegerField(null=True, blank=True)
     title = models.CharField(max_length=100, null=True, blank=True)
+    text = models.CharField(max_length=500, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
 
     def __str__(self) -> str:

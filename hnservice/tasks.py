@@ -36,17 +36,21 @@ def get_latest_news():
     else:
 
         # get the list of news items
-        url = f"{baseUrl}/topstories.json"
+        urls = f"{baseUrl}/topstories.json", f"{baseUrl}/askstories.json", \
+                f"{baseUrl}/showstories.json", f"{baseUrl}/jobstories.json", \
+                f"{baseUrl}/updates.json"
 
-        response = connect(url)
+        for url in urls:
+            response = connect(url)
 
-        if response:
-            news_items = response.json()
+            if response:
+                news_items = response.json()
 
-            selected_news_items = news_items[:100]
-            for item in selected_news_items:
-                item_details = get_item_details(item)
-                writer.write_item_to_db(item_details)
+                selected_news_items = news_items[:100]
+                for item in selected_news_items:
+                    item_details = get_item_details(item)
+                    if item_details:
+                        writer.write_item_to_db(item_details)
 
 
 def get_item_details(item):
@@ -60,7 +64,7 @@ def get_item_details(item):
 
     url = f"{baseUrl}/item/{item}.json"
     response = connect(url)
-    return response.json()
+    return response.json() if response else None
 
 
 def connect(url):
