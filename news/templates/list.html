@@ -5,36 +5,35 @@
 
 {% block content %}
     <h3>{{ news_heading }}</h3>
-    <div>
-        {% if 'All News' not in news_heading %}
-            <p><a href="../">Home</a></p>
-        {% endif %}
+    <main>
 
-        <div>
-            <select name="news_types" id="news_types" onchange="filterNews(this)">
-                {% for label, type in news_types.items %}
-                    {% if type not in news_heading %}
-                        <option value="{{ label }}">{{ type }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-        </div> 
+        <aside id="filter_items">
+            {% for label, type in news_types.items %}
+                {% if type not in news_heading %}
+                    <p class="filter_item">
+                        <a href="{% url label %}">{{ type }}</a>
+                    </p>
+                {% endif %}
+            {% endfor %}
+        </aside> 
 
-        {% for new_item in page_obj %}
-        <div style="border-bottom: 2px solid black">
-            <h4>{{ new_item.by }} posted on: <a>{{ new_item.time | to_date }}</a></h4>
+        <article>
+            {% for new_item in page_obj %}
+            <div style="border-bottom: 2px solid black">
+                <h4>{{ new_item.by }} posted on: <a>{{ new_item.time | to_date }}</a></h4>
 
-            {% if new_item.title %}
-                <p>{{ new_item.title }}</p>
-            {% endif %}
-        
-            {% if new_item.text %}
-                {% autoescape off %}
-                    <p>{{ new_item.text | truncatewords_html:10 }}</p>
-                {% endautoescape %}
-            {% endif %} 
-            <a href="{{ new_item.get_absolute_url }}">more details></a>           
-        </div>
+                {% if new_item.title %}
+                    <p>{{ new_item.title }}</p>
+                {% endif %}
+            
+                {% if new_item.text %}
+                    {% autoescape off %}
+                        <p>{{ new_item.text | truncatewords_html:10 }}</p>
+                    {% endautoescape %}
+                {% endif %} 
+                <a href="{{ new_item.get_absolute_url }}">more details></a>           
+            </div>
+        </article>  
         
         {% empty %}
             <div>Sorry, no {{ news_heading }} to display.</div>
@@ -53,5 +52,5 @@
                 <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
             {% endif %}
         </div>
-    </div>
+    </main>
 {% endblock content %}
