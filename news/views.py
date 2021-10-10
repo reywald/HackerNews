@@ -5,7 +5,7 @@ from itertools import chain
 
 
 class BaseListView(ListView):
-    paginate_by = 10
+    paginate_by = 5
     template_name = 'list.html'
     ordering = '-id'
     heading_type = ''

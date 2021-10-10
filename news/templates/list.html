@@ -4,8 +4,7 @@
 {% block title %}Latest News{% endblock title %}
 
 {% block content %}
-    <h3>{{ news_heading }}</h3>
-    <main>
+    <div>
 
         <aside id="filter_items">
             {% for label, type in news_types.items %}
@@ -17,40 +16,52 @@
             {% endfor %}
         </aside> 
 
-        <article>
-            {% for new_item in page_obj %}
-            <div style="border-bottom: 2px solid black">
-                <h4>{{ new_item.by }} posted on: <a>{{ new_item.time | to_date }}</a></h4>
+        <article id="main">
+            <h3>{{ news_heading }}</h3>
 
-                {% if new_item.title %}
-                    <p>{{ new_item.title }}</p>
+            {% for new_item in page_obj %}
+            <div class="news-info">
+                <div class="user-date">
+                    <span>{{ new_item.by }}</span>
+                    <p style="font-style: oblique;">
+                        {{new_item.type }}
+                    </p>
+                        <small>{{ new_item.time | to_date }}</small>
+                </div>
+
+                <div class="title">
+                    {% if new_item.title %}
+                        <h4>{{ new_item.title }}</h4>
+                    {% endif %}
+                
+                    {% if new_item.text %}
+                        {% autoescape off %}
+                            <p>{{ new_item.text | truncatewords_html:20 }}</p>
+                        {% endautoescape %}
+                    {% endif %} 
+                    <a href="{{ new_item.get_absolute_url }}" class="more">Read More</a>  
+                </div>
+                <br style="clear:both;" />
+            </div>
+
+            {% empty %}
+                <div>Sorry, no {{ news_heading }} to display.</div>
+            {% endfor %}
+
+            <div id="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
                 {% endif %}
-            
-                {% if new_item.text %}
-                    {% autoescape off %}
-                        <p>{{ new_item.text | truncatewords_html:10 }}</p>
-                    {% endautoescape %}
-                {% endif %} 
-                <a href="{{ new_item.get_absolute_url }}">more details></a>           
+
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
             </div>
         </article>  
         
-        {% empty %}
-            <div>Sorry, no {{ news_heading }} to display.</div>
-        {% endfor %}
-
-        <div class="pagination">
-            {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-            {% endif %}
-
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-            {% endif %}
-        </div>
-    </main>
+    </div>
 {% endblock content %}
