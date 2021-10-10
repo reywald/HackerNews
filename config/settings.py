@@ -41,10 +41,18 @@ INSTALLED_APPS = [
     # local apps
     'news.apps.NewsConfig',
     'hnservice.apps.HnserviceConfig',
+    'apis.apps.ApisConfig',
 
     # 3rd party apps
     'background_task',
+    'rest_framework',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ]
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
