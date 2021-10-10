@@ -64,6 +64,7 @@ class PollOption(Base):
 
     parent = models.PositiveIntegerField(null=True, blank=True)
     score = models.PositiveIntegerField(null=True, blank=True)
+    text = models.CharField(max_length=500, null=True, blank=True)
 
     def __str__(self) -> str:
         return self.parent

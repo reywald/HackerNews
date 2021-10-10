@@ -1,19 +1,11 @@
 {% extends 'base.html' %}
 {% load timestamptag %}
-
-{% block title %}Latest News{% endblock title %}
+{% block title %}Search Results{% endblock title %}
 
 {% block content %}
     <div>
 
         <aside id="filter_items">
-            <div class="search">
-                <form action="{% url 'search_results' %}" method="get">
-                    <input type="text" name="search" placeholder="Search by text">
-                    <input type="submit" value="Search">
-                </form>
-            </div>
-
             {% for label, type in news_types.items %}
                 {% if type not in news_heading %}
                     <p class="filter_item">

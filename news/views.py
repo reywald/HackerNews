@@ -1,4 +1,5 @@
 from django.views.generic import ListView, DetailView
+from django.db.models import Q
 from .models import Comment, Job, Poll, PollOption, Story
 
 from itertools import chain
@@ -13,7 +14,8 @@ class BaseListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['news_heading'] = self.heading_type
-        context['news_types'] = {'all_news': "All News", 'jobs': "Jobs", 'polls': "Polls", 'stories': "Stories"}
+        context['news_types'] = {
+            'all_news': "All News", 'jobs': "Jobs", 'polls': "Polls", 'stories': "Stories"}
 
         return context
 
@@ -39,6 +41,25 @@ class NewsListView(BaseListView):
         stories = Story.objects.all()
 
         return sorted(chain(comments, jobs, polls, polloptions, stories), key=lambda item: item.id, reverse=True)
+
+
+class SearchListView(BaseListView):
+    heading_type = "Search Results"
+    template_name = "search.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get('search')
+
+        comments = Comment.objects.filter(text__icontains=query)
+        jobs = Job.objects.filter(
+            Q(title__icontains=query) | Q(text__icontains=query))
+        polls = Poll.objects.filter(
+            Q(title__icontains=query) | Q(text__icontains=query))
+        polloptions = PollOption.objects.filter(text__icontains=query)
+        stories = Story.objects.filter(
+            Q(title__icontains=query) | Q(text__icontains=query))
+
+        return sorted(chain(comments, jobs, polls, polloptions, stories), key=lambda item: item.id)
 
 
 class CommentListView(BaseListView):
