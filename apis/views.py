@@ -6,23 +6,28 @@ from .serializers import (
     PollOptionSerializer, StorySerializer
 )
 
+from drf_multiple_model.viewsets import ObjectMultipleModelAPIViewSet
+from drf_multiple_model.pagination import MultipleModelLimitOffsetPagination
 
-# class ListAll(generics.ListAPIView):
 
-#     def get(self, request, *args, **kwargs):
-#         comment_serializer = CommentSerializer(models.Comment.objects.all())
-# job_serializer = JobSerializer(models.Job.objects.all())
-# poll_serializer = PollSerializer(models.Poll.objects.all())
-# poll_option_serializer = PollOptionSerializer(models.PollOption.objects.all())
-# story_serializer = StorySerializer(models.Story.objects.all())
+class LimitPagination(MultipleModelLimitOffsetPagination):
+    default_limit = 10
 
-# return Response({
-#     'comments': comment_serializer.data,
-# })
-# 'jobs': job_serializer.data,
-# 'polls': poll_serializer.data,
-# 'poll_options': poll_option_serializer.data,
-# 'stories': story_serializer.data,
+
+class HomeViewSet(ObjectMultipleModelAPIViewSet):
+    pagination_class = LimitPagination
+    querylist = [
+        {'queryset': models.Story.objects.order_by(
+            '-id'), 'serializer_class': StorySerializer},
+        {'queryset': models.Comment.objects.order_by(
+            '-id'), 'serializer_class': CommentSerializer},
+        {'queryset': models.Job.objects.order_by(
+            '-id'), 'serializer_class': JobSerializer},
+        {'queryset': models.Poll.objects.order_by(
+            '-id'), 'serializer_class': PollSerializer},
+        {'queryset': models.PollOption.objects.order_by(
+            '-id'), 'serializer_class': PollOptionSerializer},
+    ]
 
 
 class CommentViewSet(viewsets.ModelViewSet):

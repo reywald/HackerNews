@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     # 3rd party apps
     'background_task',
     'rest_framework',
+    'drf_multiple_model',
 ]
 
 REST_FRAMEWORK = {
